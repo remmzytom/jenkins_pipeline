@@ -23,9 +23,9 @@ pipeline {
                 echo "Checking the quality of the code."
             }
         }
-        stage('complete') {
+        stage('Deploy') {
             steps {
-                echo "Deploying the application to a $TESTING_ENVIRONMENT specified by the environment variable." and completed
+                echo "Deploying the application to a $TESTING_ENVIRONMENT specified by the environment variable."
             }
         }
         stage('Approval') {
@@ -42,3 +42,4 @@ pipeline {
         }
     }
 }
+
