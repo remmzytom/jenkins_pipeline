@@ -8,39 +8,50 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo "Fetching the source code from the $DIRECTORY_PATH specified by the environment variable."
-                echo "Compiling the code and generating necessary artifacts."
+                echo "Build the code using mvn clean package to compile and package your code."
             }
         }
-        stage('Test') {
+        stage('Unit and Integration Tests') {
             steps {
-                echo "Running unit tests."
-                echo "Running integration tests."
+                echo "Run unit tests to ensure the code functions as expected and run integration using mvn test."
             }
         }
-        stage('Code Quality Check') {
+        stage('Code Analysis') {
             steps {
-                echo "Checking the quality of the code."
+                echo "Code Analysis - Integrate a code analysis tool using sonar-scanner to analyze the code " +
+                     "and ensure it meets industry standards."
             }
         }
-        stage('Deploy') {
+        stage('Security Scan') {
             steps {
-                echo "Deploying the application to a $TESTING_ENVIRONMENT specified by the environment variable."
+                echo "Perform a security scan on the code using a tool (e.g., OWASP ZAP) to identify any vulnerabilities."
             }
         }
-        stage('Approval') {
+        stage('Deploy to Staging') {
             steps {
-                echo "Starting manual approval..."
-                sleep 10 // Pause for 10 seconds 
-                echo "Manual approval completed."
+                echo "Deploy to Staging - Deploy the application to a staging server (e.g., AWS EC2 instance)."
             }
         }
-        stage('Deploy to production') {
+        stage('Integration Tests on Staging') {
             steps {
-                echo "Deploying the application to the production environment $PRODUCTION_ENVIRONMENT"
+                echo "Run integration tests on the staging environment using mvn verify -Pstaging " +
+                     "to ensure the application functions as expected in a production-like environment."
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo "Deploy to Production - Deploy the application to a production server like deploy_script.sh " +
+                     "(e.g., AWS EC2 instance)."
             }
         }
     }
+    post {
+        success {
+            echo "Sending Build and Deployment Status Email..."
+            mail to: "remmzytom@gmail.com",
+            subject: "Build and Deployment Status Email",
+            body: "Build and deployment were successful"
+        }
+    }
 }
-
 
